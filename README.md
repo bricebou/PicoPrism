@@ -5,6 +5,8 @@ A simple plugin that adds [Prism](https://prismjs.com) to Pico.
 
 __Documentation yet to come --'__
 
+Looking forward for Parsedown 1.8 and ParsedownExtra 0.8 (both in beta) in order to use more Prism plugins, relying on `data-...` attributes.
+
 ## Configuration
 
 ```yaml
@@ -30,4 +32,8 @@ prism:
     # Don"t load Prism on certain pages based on their template
     # Use the pipe | as separator, without space ; case-sensitive.
     excluded-templates: "index|category|supcategory"
+    # copy-button
+    copy-button: true
+    # Default / If empty: Select Code
+    copy-button-text: "Select Code"
 ```

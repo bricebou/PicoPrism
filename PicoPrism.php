@@ -21,6 +21,8 @@ class PicoPrism extends AbstractPicoPlugin {
         $this->prism_line_numbering = false;
         $this->prism_line_numbering_auto = false;
         $this->prism_global_class_tag = "body";
+        $this->prism_copy_button = false;
+        $this->prism_copy_button_text = "Select Code";
         $this->prism_load = true;
 
         $this->prism_path = $config['base_url'] .'plugins/PicoPrism/prismjs/';
@@ -49,6 +51,16 @@ class PicoPrism extends AbstractPicoPlugin {
         {
             $this->prism_excluded_templates = explode("|", $config['prism']['excluded-templates']);
         }
+
+        if (isset($config['prism']['copy-button']) && $config['prism']['copy-button'] == true)
+        {
+            $this->prism_copy_button = true;
+
+            if (isset($config['prism']['copy-button-text']) && $config['prism']['copy-button-text'] != "")
+            {
+                $this->prism_copy_button_text = $config['prism']['copy-button-text'];
+            }
+        }
     }
 
     public function onMetaParsed(array &$meta)
@@ -69,14 +81,22 @@ class PicoPrism extends AbstractPicoPlugin {
     private function build_css ()
     {
         $css = '<link href="'. $this->prism_path . 'themes/prism.min.css" rel="stylesheet" />';
-        if (!empty($this->prism_css_theme)) {
+        if (!empty($this->prism_css_theme))
+        {
             $css = '<link href="'. $this->prism_path .'themes/prism-'. $this->prism_css_theme .'.min.css" rel="stylesheet" />';
         }
 
-        if ($this->prism_line_numbering) {
+        if ($this->prism_line_numbering)
+        {
             // Line-numbering plugin needs 'line-numbers' class to desired <pre> => taken care automatically inside the build_script() function
             $css .= PHP_EOL . '<link href="'. $this->prism_path . 'plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />';
         }
+
+        if ($this->prism_copy_button)
+        {
+            $css .= PHP_EOL . '<link href="'. $this->prism_path . 'plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />';
+        }
+        
 
         return $css;
     }
@@ -89,6 +109,8 @@ class PicoPrism extends AbstractPicoPlugin {
             $script .= PHP_EOL . '<script>var el = document.querySelector("' . $this->prism_global_class_tag . '"); el.classList.add("language-' . $this->prism_global_class . '");</script>';
         }
 
+        $script .= PHP_EOL . '<script>var pres = document.querySelectorAll("pre"); pres.forEach(function(e) { e.dataset.src = "'. $this->prism_path .'plugins/toolbar/prism-toolbar.js";});</script>';
+
         $script .= '<script src="' . $this->prism_path . 'prism.js"></script>' . PHP_EOL . '<script src="' . $this->prism_path . 'plugins/autoloader/prism-autoloader.min.js"></script>' . PHP_EOL . '<script>Prism.plugins.autoloader.languages_path = "'. $this->prism_path . 'languages/"</script>';
 
         if ($this->prism_line_numbering)
@@ -100,6 +122,11 @@ class PicoPrism extends AbstractPicoPlugin {
             }
             
             $script .= PHP_EOL . '<script src="'. $this->prism_path . 'plugins/line-numbers/prism-line-numbers.min.js"></script>' ;
+        }
+
+        if ($this->prism_copy_button)
+        {
+            $script .= PHP_EOL . '<script src="'. $this->prism_path . 'plugins/toolbar/prism-toolbar.min.js"></script>' . PHP_EOL . '<script>Prism.plugins.toolbar.registerButton("select-code",{text:"' . $this->prism_copy_button_text . '",onClick:function(b){if(document.body.createTextRange){var a=document.body.createTextRange();a.moveToElementText(b.element);a.select()}else if(window.getSelection){var c=window.getSelection();a=document.createRange();a.selectNodeContents(b.element);c.removeAllRanges();c.addRange(a)}}});</script>';
         }
 
         return $script;
