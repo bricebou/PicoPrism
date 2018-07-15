@@ -109,8 +109,6 @@ class PicoPrism extends AbstractPicoPlugin {
             $script .= PHP_EOL . '<script>var el = document.querySelector("' . $this->prism_global_class_tag . '"); el.classList.add("language-' . $this->prism_global_class . '");</script>';
         }
 
-        $script .= PHP_EOL . '<script>var pres = document.querySelectorAll("pre"); pres.forEach(function(e) { e.dataset.src = "'. $this->prism_path .'plugins/toolbar/prism-toolbar.js";});</script>';
-
         $script .= '<script src="' . $this->prism_path . 'prism.js"></script>' . PHP_EOL . '<script src="' . $this->prism_path . 'plugins/autoloader/prism-autoloader.min.js"></script>' . PHP_EOL . '<script>Prism.plugins.autoloader.languages_path = "'. $this->prism_path . 'languages/"</script>';
 
         if ($this->prism_line_numbering)
