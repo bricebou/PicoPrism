@@ -27,7 +27,16 @@ class PicoPrism extends AbstractPicoPlugin {
 
         $this->prism_path = $config['base_url'] .'plugins/PicoPrism/prismjs/';
 
-        $prism_themes = array("coy", "dark", "funky", "okaidia", "solarizedlight", "tomorrow", "twilight");
+        $prism_themes = array(
+            // Themes provided by Prism
+            "coy", "dark", "funky", "okaidia", "solarizedlight", "tomorrow", "twilight",
+        );
+
+        // For other themes
+        if (isset($config['prism']['other-themes']) && $config['prism']['other-themes'] != "")
+        {
+            $prism_themes = array_merge($prism_themes, explode(" | ", $config['prism']['other-themes']));
+        }
 
         if (isset($config['prism']['theme']) && in_array(trim($config['prism']['theme']), $prism_themes))
         {   
