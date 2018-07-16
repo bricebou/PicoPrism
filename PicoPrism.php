@@ -2,11 +2,12 @@
 /**
  * PicoPrism
  *
- * Add Prism https://prismjs.com/ to Pico
+ * Add [Prism](https://prismjs.com/) to Pico
  *
- * @author Brice Boucard
- * @link https://github.com/bricebou/PicoPrism
+ * @author  Brice Boucard (http://momh.fr)
+ * @link    https://github.com/bricebou/PicoPrism
  * @license MIT License | http://bricebou.mit-license.org/
+ * @version 1.0
  */
 
 class PicoPrism extends AbstractPicoPlugin {
@@ -21,8 +22,8 @@ class PicoPrism extends AbstractPicoPlugin {
         $this->prism_line_numbering = false;
         $this->prism_line_numbering_auto = false;
         $this->prism_global_class_tag = "body";
-        $this->prism_copy_button = false;
-        $this->prism_copy_button_text = "Select Code";
+        $this->prism_select_button = false;
+        $this->prism_select_button_text = "Select Code";
         $this->prism_load = true;
 
         $this->prism_path = $config['base_url'] .'plugins/PicoPrism/prismjs/';
@@ -58,16 +59,16 @@ class PicoPrism extends AbstractPicoPlugin {
 
         if (isset($config['prism']['excluded-templates']) && $config['prism']['excluded-templates'] != "")
         {
-            $this->prism_excluded_templates = explode("|", $config['prism']['excluded-templates']);
+            $this->prism_excluded_templates = explode(" | ", $config['prism']['excluded-templates']);
         }
 
-        if (isset($config['prism']['copy-button']) && $config['prism']['copy-button'] == true)
+        if (isset($config['prism']['select-button']) && $config['prism']['select-button'] == true)
         {
-            $this->prism_copy_button = true;
+            $this->prism_select_button = true;
 
-            if (isset($config['prism']['copy-button-text']) && $config['prism']['copy-button-text'] != "")
+            if (isset($config['prism']['select-button-text']) && $config['prism']['select-button-text'] != "")
             {
-                $this->prism_copy_button_text = $config['prism']['copy-button-text'];
+                $this->prism_select_button_text = $config['prism']['select-button-text'];
             }
         }
     }
@@ -101,7 +102,7 @@ class PicoPrism extends AbstractPicoPlugin {
             $css .= PHP_EOL . '<link href="'. $this->prism_path . 'plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />';
         }
 
-        if ($this->prism_copy_button)
+        if ($this->prism_select_button)
         {
             $css .= PHP_EOL . '<link href="'. $this->prism_path . 'plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />';
         }
@@ -131,9 +132,9 @@ class PicoPrism extends AbstractPicoPlugin {
             $script .= PHP_EOL . '<script src="'. $this->prism_path . 'plugins/line-numbers/prism-line-numbers.min.js"></script>' ;
         }
 
-        if ($this->prism_copy_button)
+        if ($this->prism_select_button)
         {
-            $script .= PHP_EOL . '<script src="'. $this->prism_path . 'plugins/toolbar/prism-toolbar.min.js"></script>' . PHP_EOL . '<script>Prism.plugins.toolbar.registerButton("select-code",{text:"' . $this->prism_copy_button_text . '",onClick:function(b){if(document.body.createTextRange){var a=document.body.createTextRange();a.moveToElementText(b.element);a.select()}else if(window.getSelection){var c=window.getSelection();a=document.createRange();a.selectNodeContents(b.element);c.removeAllRanges();c.addRange(a)}}});</script>';
+            $script .= PHP_EOL . '<script src="'. $this->prism_path . 'plugins/toolbar/prism-toolbar.min.js"></script>' . PHP_EOL . '<script>Prism.plugins.toolbar.registerButton("select-code",{text:"' . $this->prism_select_button_text . '",onClick:function(b){if(document.body.createTextRange){var a=document.body.createTextRange();a.moveToElementText(b.element);a.select()}else if(window.getSelection){var c=window.getSelection();a=document.createRange();a.selectNodeContents(b.element);c.removeAllRanges();c.addRange(a)}}});</script>';
         }
 
         return $script;
