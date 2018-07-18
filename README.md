@@ -10,6 +10,8 @@ PicoPrism
 
 A simple plugin that adds the syntax highlighter [Prism](https://prismjs.com) to Pico.
 
+You can see it live on [this Demo Page on my website](http://momh.fr/tutos/Pico/picoprism_demo "PicoPrism Demo").
+
 But why another Pico plugin for syntax highlighting, while there is [PicoSyntaxHighlighter](https://github.com/bricebou/PicoSyntaxHighlighter)?     
 Here are some reasons:
 
